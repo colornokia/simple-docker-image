@@ -1,3 +1,4 @@
 FROM nginx
 COPY html/* /site/
-ADD nginx/conf/site.conf /etc/nginx/conf.d/default.conf
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx/conf/site.conf /etc/nginx/conf.d/default.conf
