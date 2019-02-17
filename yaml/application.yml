@@ -1,40 +1,34 @@
-apiVersion: apps/v1
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
-  name: auto-demo-deploy
+  name: nginx-host
 spec:
-  replicas: 3
   selector:
-    matchLabels: 
-      app: auto-demo
-  minReadySeconds: 10
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 1
+    matchLabels:
+      app: nginx
+  replicas: 1
   template:
     metadata:
       labels:
-        app: auto-demo
+        app: nginx
     spec:
       containers:
-      - name: auto-demo-container
-        image: colornokia/k8s-jenkins:latest
+      - name: nginx
+        image: colornokia/nginx:latest
         ports:
-        - containerPort: 80 
+        - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auto-demo-svc
+  name: nginx-svc
   labels:
-    app: auto-demo
+    app: nginx
 spec:
   type: NodePort
   ports:
   - port: 80
-    nodePort: 31000
+    nodePort: 32001
     protocol: TCP
   selector:
-    app: auto-demo
+    app: nginx
